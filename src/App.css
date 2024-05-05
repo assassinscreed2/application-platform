@@ -1,38 +1,66 @@
-.App {
-  text-align: center;
+.Card {
+  max-width: 18em;
+  padding: 1.5em;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.CompanyLogo {
+  width: 100%;
+  height: 70%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.CardHeader {
+  padding-left: 1em;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.CompanyName {
+  font-family: "Lexend";
+  color: #8b8b8b;
+  font-size: 0.9rem;
 }
 
-.App-link {
-  color: #61dafb;
+.JobRole {
+  font-weight: 500;
+  font-size: 1.4rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.Salary {
+  color: #8b8b8b;
+}
+
+.AboutCompany {
+  position: relative;
+}
+
+.JobDescriptionContainer {
+  max-height: 14em;
+  overflow: hidden;
+}
+
+.AboutCompanyHeader {
+  font-size: 1.3rem;
+}
+
+.JobDescription {
+  mask-image: linear-gradient(
+    linear-gradient(to bottom, rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 0) 80%)
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 1) 30%,
+    rgba(0, 0, 0, 0) 46%
+  );
+}
+
+.ShowMoreButton {
+  position: absolute;
+}
+
+.EasyApplyButton {
+  background-color: #54efc3 !important;
+  height: 3em;
+  width: 100%;
+}
+
+.EasyApplyText {
+  color: black;
 }
