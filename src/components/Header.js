@@ -1,8 +1,86 @@
 import { OutlinedInput } from "@mui/material";
-import "./App.css";
+import { useState, useEffect } from "react";
 import Select from "react-select";
 
-export default function Header() {
+export default function Header({ data, setFilteredData }) {
+  const [companyName, setCompanyName] = useState();
+
+  const applyFilters = (filters) => {
+    console.log(data);
+    let newData = { ...data };
+    newData.jdList.map((job) => console.log("newData", job));
+
+    if (filters.jobRole.length > 0) {
+      newData.jdList = newData.jdList.filter((item) =>
+        filters.jobRole.includes(item.jobRole)
+      );
+    }
+
+    if (filters.employeesCount) {
+      newData.jdList = newData.jdList.filter(
+        (item) => item.employeesCount === filters.employeesCount
+      );
+    }
+    if (filters.experience) {
+      newData.jdList = newData.jdList.filter(
+        (item) => item.minExp <= filters.experience
+      );
+    }
+
+    if (filters.location.length > 0) {
+      newData.jdList = newData.jdList.filter((item) => {
+        console.log(item.location);
+        if (item.location === "remote") {
+          return filters.location.includes("remote");
+        } else if (item.location === "hybrid") {
+          return filters.location.includes("hybrid");
+        }
+
+        return filters.location.includes("in-office");
+      });
+    }
+
+    if (filters.minJdSalary) {
+      newData.jdList = newData.jdList.filter((item) => {
+        console.log("salary", item.minJdSalary);
+
+        return item.minJdSalary >= filters.minJdSalary;
+      });
+    }
+
+    if (companyName) {
+      newData.jdList = newData.jdList.filter((item) =>
+        item.companyName.toLowerCase().includes(companyName.toLowerCase())
+      );
+    }
+
+    setFilteredData(newData);
+  };
+
+  const [filters, setFilters] = useState({
+    jobRole: [],
+    employeesCount: "",
+    experience: null,
+    location: [],
+    minJdSalary: null,
+    companyName: "",
+  });
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const applyFilter = () => {
+      applyFilters(filters);
+    };
+
+    data && applyFilter();
+  }, [filters, companyName]);
+
   const roleOptions = [
     {
       label: "Engineering",
@@ -61,31 +139,70 @@ export default function Header() {
   ];
 
   return (
-    <div>
+    <>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Roles:</label>
-        <Select isMulti options={roleOptions} />
+        {filters.jobRole.length > 0 && <label>Roles:</label>}
+        <Select
+          isMulti
+          options={roleOptions}
+          onChange={(e) => {
+            handleFilterChange(
+              "jobRole",
+              Array.from(e, (option) => option.value)
+            );
+          }}
+        />
       </div>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
         <label>Employees Number:</label>
-        <Select options={employeeNumberOptions} />
+        <Select
+          options={employeeNumberOptions}
+          onChange={(e) => {
+            handleFilterChange("employeesCount", e.value);
+          }}
+        />
       </div>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
         <label>Experience:</label>
-        <Select options={experienceOption} />
+        <Select
+          options={experienceOption}
+          onChange={(e) => {
+            handleFilterChange("experience", e.value);
+          }}
+        />
       </div>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
         <label>Remote:</label>
-        <Select isMulti options={remoteOption} />
+        <Select
+          isMulti
+          options={remoteOption}
+          onChange={(e) => {
+            handleFilterChange(
+              "location",
+              Array.from(e, (option) => option.value)
+            );
+          }}
+        />
       </div>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
         <label>Min Base Pay:</label>
-        <Select options={minBasePay} />
+        <Select
+          options={minBasePay}
+          onChange={(e) => {
+            handleFilterChange("minJdSalary", e.value);
+          }}
+        />
       </div>
       <div style={{ display: "inline-block", minWidth: "10em" }}>
         <label>Roles:</label>
-        <OutlinedInput sx={{ maxHeight: "2.3em" }} placeholder="Company Name" />
+        <OutlinedInput
+          sx={{ maxHeight: "2.3em" }}
+          placeholder="Company Name"
+          onChange={(e) => {
+            setCompanyName(e.target.value);
+          }}
+        />
       </div>
-    </div>
+    </>
   );
 }
