@@ -5,7 +5,39 @@ import Select from "react-select";
 export default function Header({ data, setFilteredData }) {
   const [companyName, setCompanyName] = useState();
 
+  const [filters, setFilters] = useState({
+    jobRole: [],
+    employeesCount: "",
+    experience: null,
+    location: [],
+    minJdSalary: null,
+    companyName: "",
+  });
+
+  const handleFilterChange = (filterType, event) => {
+    let value;
+    if (filterType == "jobRole" || filterType == "location") {
+      value = Array.from(event, (option) => option.value);
+    } else {
+      value = event ? event.value : event;
+    }
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterType]: value,
+    }));
+  };
+
+  useEffect(() => {
+    const applyFilter = () => {
+      applyFilters(filters);
+    };
+
+    data && applyFilter();
+  }, [filters, companyName]);
+
+  // Logic to filter jobs
   const applyFilters = (filters) => {
+    console.log(filters);
     let newData = { ...data };
 
     if (filters.jobRole.length > 0) {
@@ -51,30 +83,6 @@ export default function Header({ data, setFilteredData }) {
 
     setFilteredData(newData);
   };
-
-  const [filters, setFilters] = useState({
-    jobRole: [],
-    employeesCount: "",
-    experience: null,
-    location: [],
-    minJdSalary: null,
-    companyName: "",
-  });
-
-  const handleFilterChange = (filterType, event) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterType]: event ? event.value : event,
-    }));
-  };
-
-  useEffect(() => {
-    const applyFilter = () => {
-      applyFilters(filters);
-    };
-
-    data && applyFilter();
-  }, [filters, companyName]);
 
   const roleOptions = [
     {
@@ -137,16 +145,15 @@ export default function Header({ data, setFilteredData }) {
     <Grid container direction="row" justifyContent="space-evenly">
       <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
         <div style={{ minHeight: "1.5em" }}>
-          {filters.jobRole.length > 0 && <Typography>Roles</Typography>}
+          {filters.jobRole && filters.jobRole.length > 0 && (
+            <Typography>Roles</Typography>
+          )}
         </div>
         <Select
           isMulti
           options={roleOptions}
           onChange={(e) => {
-            handleFilterChange(
-              "jobRole",
-              Array.from(e, (option) => option.value)
-            );
+            handleFilterChange("jobRole", e);
           }}
         />
       </Grid>
@@ -170,7 +177,7 @@ export default function Header({ data, setFilteredData }) {
           isClearable
           options={experienceOption}
           onChange={(e) => {
-            handleFilterChange("experience", e.value);
+            handleFilterChange("experience", e);
           }}
         />
       </Grid>
@@ -182,10 +189,7 @@ export default function Header({ data, setFilteredData }) {
           isMulti
           options={remoteOption}
           onChange={(e) => {
-            handleFilterChange(
-              "location",
-              Array.from(e, (option) => option.value)
-            );
+            handleFilterChange("location", e);
           }}
         />
       </Grid>
