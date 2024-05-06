@@ -73,7 +73,9 @@ export default function Header({ data, setFilteredData }) {
 
     if (filters.minJdSalary) {
       newData.jdList = newData.jdList.filter((item) => {
-        return item.minJdSalary >= filters.minJdSalary;
+        return item.minJdSalary
+          ? item.minJdSalary >= filters.minJdSalary
+          : Math.max(1, item.maxJdSalary - 10) >= filters.minJdSalary;
       });
     }
 
@@ -154,6 +156,7 @@ export default function Header({ data, setFilteredData }) {
         <Select
           isMulti
           options={roleOptions}
+          placeholder="Roles"
           onChange={(e) => {
             handleFilterChange("jobRole", e);
           }}
@@ -166,6 +169,7 @@ export default function Header({ data, setFilteredData }) {
         <Select
           isClearable
           options={employeeNumberOptions}
+          placeholder="Number Of Employees"
           onChange={(e) => {
             handleFilterChange("employeesCount", e);
           }}
@@ -178,6 +182,7 @@ export default function Header({ data, setFilteredData }) {
         <Select
           isClearable
           options={experienceOption}
+          placeholder="Experience"
           onChange={(e) => {
             handleFilterChange("experience", e);
           }}
@@ -190,6 +195,7 @@ export default function Header({ data, setFilteredData }) {
         <Select
           isMulti
           options={remoteOption}
+          placeholder="Remote"
           onChange={(e) => {
             handleFilterChange("location", e);
           }}
@@ -202,6 +208,7 @@ export default function Header({ data, setFilteredData }) {
         <Select
           isClearable
           options={minBasePay}
+          placeholder="Minimum Base Pay Salary"
           onChange={(e) => {
             handleFilterChange("minJdSalary", e);
           }}
@@ -213,7 +220,7 @@ export default function Header({ data, setFilteredData }) {
         </div>
         <OutlinedInput
           sx={{ maxHeight: "2.3em" }}
-          placeholder="Company Name"
+          placeholder="Search Company Name"
           onChange={(e) => {
             setCompanyName(e.target.value);
           }}

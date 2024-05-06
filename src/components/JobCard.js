@@ -2,6 +2,10 @@ import { Card, Grid, Typography, Button } from "@mui/material";
 import "../App.css";
 
 export default function JobCard({ job }) {
+  const hanldeOpenURl = (url) => {
+    window.open(url, "_blank");
+  };
+
   return (
     <Card className="Card">
       <Grid container direction="column">
@@ -36,7 +40,11 @@ export default function JobCard({ job }) {
         {/* salary */}
         <Grid item>
           <Typography textAlign="left" className="Salary">
-            Estimated Salary: {job.minJdSalary} - {job.maxJdSalary}
+            Estimated Salary:{" "}
+            {job.minJdSalary
+              ? job.minJdSalary
+              : Math.max(job.maxJdSalary - 10, 1)}{" "}
+            - {job.maxJdSalary ? job.maxJdSalary : job.minJdSalary + 10}
           </Typography>
         </Grid>
 
@@ -85,7 +93,11 @@ export default function JobCard({ job }) {
 
         {/* Easy apply button */}
         <Grid item>
-          <Button variant="contained" className="EasyApplyButton">
+          <Button
+            onClick={() => hanldeOpenURl(job.jdLink)}
+            variant="contained"
+            className="EasyApplyButton"
+          >
             <Typography className="EasyApplyText">Easy Apply</Typography>
           </Button>
         </Grid>
