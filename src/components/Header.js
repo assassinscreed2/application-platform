@@ -1,4 +1,4 @@
-import { OutlinedInput } from "@mui/material";
+import { OutlinedInput, Grid, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import Select from "react-select";
 
@@ -6,9 +6,7 @@ export default function Header({ data, setFilteredData }) {
   const [companyName, setCompanyName] = useState();
 
   const applyFilters = (filters) => {
-    console.log(data);
     let newData = { ...data };
-    newData.jdList.map((job) => console.log("newData", job));
 
     if (filters.jobRole.length > 0) {
       newData.jdList = newData.jdList.filter((item) =>
@@ -29,7 +27,6 @@ export default function Header({ data, setFilteredData }) {
 
     if (filters.location.length > 0) {
       newData.jdList = newData.jdList.filter((item) => {
-        console.log(item.location);
         if (item.location === "remote") {
           return filters.location.includes("remote");
         } else if (item.location === "hybrid") {
@@ -42,8 +39,6 @@ export default function Header({ data, setFilteredData }) {
 
     if (filters.minJdSalary) {
       newData.jdList = newData.jdList.filter((item) => {
-        console.log("salary", item.minJdSalary);
-
         return item.minJdSalary >= filters.minJdSalary;
       });
     }
@@ -66,10 +61,10 @@ export default function Header({ data, setFilteredData }) {
     companyName: "",
   });
 
-  const handleFilterChange = (filterType, value) => {
+  const handleFilterChange = (filterType, event) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [filterType]: value,
+      [filterType]: event ? event.value : event,
     }));
   };
 
@@ -139,9 +134,11 @@ export default function Header({ data, setFilteredData }) {
   ];
 
   return (
-    <>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        {filters.jobRole.length > 0 && <label>Roles:</label>}
+    <Grid container direction="row" justifyContent="space-evenly">
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {filters.jobRole.length > 0 && <Typography>Roles</Typography>}
+        </div>
         <Select
           isMulti
           options={roleOptions}
@@ -152,27 +149,35 @@ export default function Header({ data, setFilteredData }) {
             );
           }}
         />
-      </div>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Employees Number:</label>
+      </Grid>
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {filters.employeesCount && <Typography>No Of Employes</Typography>}
+        </div>
         <Select
+          isClearable
           options={employeeNumberOptions}
           onChange={(e) => {
-            handleFilterChange("employeesCount", e.value);
+            handleFilterChange("employeesCount", e);
           }}
         />
-      </div>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Experience:</label>
+      </Grid>
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {filters.experience && <Typography>Experience</Typography>}
+        </div>
         <Select
+          isClearable
           options={experienceOption}
           onChange={(e) => {
             handleFilterChange("experience", e.value);
           }}
         />
-      </div>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Remote:</label>
+      </Grid>
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {filters.location.length > 0 && <Typography>Remote</Typography>}
+        </div>
         <Select
           isMulti
           options={remoteOption}
@@ -183,18 +188,23 @@ export default function Header({ data, setFilteredData }) {
             );
           }}
         />
-      </div>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Min Base Pay:</label>
+      </Grid>
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {filters.minJdSalary && <Typography>Min Base Pay</Typography>}
+        </div>
         <Select
+          isClearable
           options={minBasePay}
           onChange={(e) => {
-            handleFilterChange("minJdSalary", e.value);
+            handleFilterChange("minJdSalary", e);
           }}
         />
-      </div>
-      <div style={{ display: "inline-block", minWidth: "10em" }}>
-        <label>Roles:</label>
+      </Grid>
+      <Grid item style={{ display: "inline-block", minWidth: "10em" }}>
+        <div style={{ minHeight: "1.5em" }}>
+          {companyName && <Typography>Company Name</Typography>}
+        </div>
         <OutlinedInput
           sx={{ maxHeight: "2.3em" }}
           placeholder="Company Name"
@@ -202,7 +212,7 @@ export default function Header({ data, setFilteredData }) {
             setCompanyName(e.target.value);
           }}
         />
-      </div>
-    </>
+      </Grid>
+    </Grid>
   );
 }
