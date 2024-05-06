@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Grid } from "@mui/material";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import "./App.css";
 
 import JobCard from "./components/JobCard";
@@ -8,15 +9,18 @@ import Header from "./components/Header";
 function App() {
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
+  const [offset, setOffSet] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
       const body = JSON.stringify({
-        limit: 10,
-        offset: 0,
+        limit: 6,
+        offset: offset,
       });
 
       const requestOptions = {
@@ -30,13 +34,26 @@ function App() {
         requestOptions
       );
       const resData = await response.json();
-      console.log(resData);
-      setData(resData);
-      setFilteredData(resData);
+      let updatedData = {};
+      if (data) {
+        updatedData = { ...data };
+        updatedData.jdList = [...updatedData.jdList, ...resData.jdList];
+      } else {
+        updatedData = { ...resData };
+      }
+
+      setData(updatedData);
+      setFilteredData(updatedData);
+      setLoading(false);
     }
 
     fetchData();
-  }, []);
+  }, [offset]);
+
+  const incrementOffset = () => {
+    setLoading(true);
+    setOffSet((prevOffSet) => prevOffSet + 6);
+  };
 
   return (
     <>
@@ -56,6 +73,26 @@ function App() {
               </Grid>
             );
           })}
+      </Grid>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        sx={{ marginTop: "1em" }}
+      >
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Grid item>
+            <Button
+              onClick={incrementOffset}
+              sx={{ textTransform: "none", color: "black" }}
+            >
+              <RefreshIcon />
+              Load More
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </>
   );
