@@ -1,4 +1,5 @@
 import { Card, Grid, Typography, Button } from "@mui/material";
+import { ElectricBolt } from "@mui/icons-material";
 import "../App.css";
 
 export default function JobCard({ job }) {
@@ -80,7 +81,7 @@ export default function JobCard({ job }) {
             className="ShowMoreButton"
           >
             <Grid item>
-              <Button>Show more</Button>
+              <Button disableRipple>Show more</Button>
             </Grid>
           </Grid>
         </Grid>
@@ -97,8 +98,14 @@ export default function JobCard({ job }) {
             onClick={() => hanldeOpenURl(job.jdLink)}
             variant="contained"
             className="EasyApplyButton"
+            startIcon={<ElectricBolt sx={{ color: "yellow" }} />}
           >
-            <Typography className="EasyApplyText">Easy Apply</Typography>
+            <Typography
+              sx={{ textTransform: "none" }}
+              className="EasyApplyText"
+            >
+              Easy Apply
+            </Typography>
           </Button>
         </Grid>
       </Grid>

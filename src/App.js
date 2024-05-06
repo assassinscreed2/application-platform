@@ -95,8 +95,8 @@ function App() {
                 <Button
                   onClick={incrementOffset}
                   sx={{ textTransform: "none", color: "black" }}
+                  startIcon={<RefreshIcon />}
                 >
-                  <RefreshIcon />
                   Load More
                 </Button>
               </Grid>
@@ -112,9 +112,13 @@ function App() {
           sx={{ height: "50em" }}
         >
           <Grid item>
-            <Typography sx={{ fontSize: "2em" }}>
-              Sorry No Job available !!
-            </Typography>
+            {filteredData == null ? (
+              <CircularProgress />
+            ) : (
+              <Typography sx={{ fontSize: "2em" }}>
+                Sorry No Job available !!
+              </Typography>
+            )}
           </Grid>
         </Grid>
       )}
