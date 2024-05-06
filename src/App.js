@@ -58,42 +58,66 @@ function App() {
   return (
     <>
       <Header data={data} setFilteredData={setFilteredData} />
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        sx={{ marginTop: "3em" }}
-      >
-        {filteredData &&
-          filteredData.jdList.map((job) => {
-            return (
-              <Grid item container justifyContent="center" lg={4} md={6} sm={8}>
-                <JobCard job={job} />
-              </Grid>
-            );
-          })}
-      </Grid>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        sx={{ marginTop: "1em" }}
-      >
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Grid item>
-            <Button
-              onClick={incrementOffset}
-              sx={{ textTransform: "none", color: "black" }}
-            >
-              <RefreshIcon />
-              Load More
-            </Button>
+      {filteredData && filteredData.jdList.length > 0 ? (
+        <>
+          <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ marginTop: "3em" }}
+          >
+            {filteredData.jdList.map((job) => {
+              return (
+                <Grid
+                  item
+                  container
+                  justifyContent="center"
+                  lg={4}
+                  md={6}
+                  sm={8}
+                >
+                  <JobCard job={job} />
+                </Grid>
+              );
+            })}
           </Grid>
-        )}
-      </Grid>
+          <Grid
+            container
+            justifyContent="center"
+            alignItems="center"
+            sx={{ marginTop: "1em" }}
+          >
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Grid item>
+                <Button
+                  onClick={incrementOffset}
+                  sx={{ textTransform: "none", color: "black" }}
+                >
+                  <RefreshIcon />
+                  Load More
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </>
+      ) : (
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "50em" }}
+        >
+          <Grid item>
+            <Typography sx={{ fontSize: "2em" }}>
+              Sorry No Job available !!
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 }

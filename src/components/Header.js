@@ -5,6 +5,7 @@ import Select from "react-select";
 export default function Header({ data, setFilteredData }) {
   const [companyName, setCompanyName] = useState();
 
+  // Filter Job Factors
   const [filters, setFilters] = useState({
     jobRole: [],
     employeesCount: "",
@@ -14,6 +15,7 @@ export default function Header({ data, setFilteredData }) {
     companyName: "",
   });
 
+  // Hanler to update Filter Factors
   const handleFilterChange = (filterType, event) => {
     let value;
     if (filterType == "jobRole" || filterType == "location") {
@@ -27,6 +29,7 @@ export default function Header({ data, setFilteredData }) {
     }));
   };
 
+  // useEffect to apply filters when specific condtions are changed
   useEffect(() => {
     const applyFilter = () => {
       applyFilters(filters);
