@@ -33,11 +33,10 @@ export default function Header({ data, setFilteredData }) {
     };
 
     data && applyFilter();
-  }, [filters, companyName]);
+  }, [filters, companyName, data]);
 
   // Logic to filter jobs
   const applyFilters = (filters) => {
-    console.log(filters);
     let newData = { ...data };
 
     if (filters.jobRole.length > 0) {
